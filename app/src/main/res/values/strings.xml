@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyHiLogDemo</string>
+    <string name="btn_show_log_view">show log view</string>
 </resources>

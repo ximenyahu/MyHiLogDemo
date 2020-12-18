@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_log).setOnClickListener {
             showViewLog();
         }
+        hiLogViewPrinter!!.printerProvider.showFloatingView()
     }
 
     private fun showViewLog() {
         HiLogManager.getInstance().hiLogConfig.addPrinter(hiLogViewPrinter);
-        hiLogViewPrinter!!.printerProvider.showFloatingView()
         HiLog.log(object : HiLogConfig() {
             override fun includeThread(): Boolean {
                 return false

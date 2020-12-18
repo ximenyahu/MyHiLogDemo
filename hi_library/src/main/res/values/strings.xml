@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hilog_clear">Clear</string>
+    <string name="hilog_close">Close</string>
+    <string name="hilog_open">Open</string>
+</resources>

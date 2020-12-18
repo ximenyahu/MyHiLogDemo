@@ -3,6 +3,7 @@ package com.simon.hi_library.log;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.simon.hi_library.R;
 import com.simon.hi_library.util.HiDisplayUtil;
 
 public class HiLogViewPrinterProvider {
@@ -21,7 +23,7 @@ public class HiLogViewPrinterProvider {
 
     private FrameLayout rootView;
     private RecyclerView recyclerView;
-    private FrameLayout logView;
+    private View logView;
 
     public HiLogViewPrinterProvider(FrameLayout rootView, RecyclerView recyclerView) {
         this.rootView = rootView;
@@ -34,11 +36,8 @@ public class HiLogViewPrinterProvider {
         }
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMarginEnd(4);
         params.gravity = Gravity.BOTTOM | Gravity.END;
         View floatingView = genFloatingView();
-        floatingView.setBackgroundColor(Color.BLACK);
-        floatingView.setAlpha(0.8f);
         params.bottomMargin = HiDisplayUtil.dp2px(100, rootView.getResources());
         rootView.addView(floatingView, params);
     }
@@ -47,36 +46,29 @@ public class HiLogViewPrinterProvider {
         if (floatingView != null) {
             return floatingView;
         }
-        TextView textView = new TextView(rootView.getContext());
-        textView.setOnClickListener(v -> {
-            if (!isOpen) {
-                showLogView();
-            }
+        View floatingView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.hilog_open,
+                null, false);
+        TextView tvOpen = floatingView.findViewById(R.id.tv_open);
+        tvOpen.setOnClickListener(v -> {
+            showLogView();
         });
-        textView.setTextSize(20);
-        textView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        textView.setText("HiLog");
-        return floatingView = textView;
+        return this.floatingView = floatingView;
     }
 
     private View genLogView() {
         if (logView != null) {
             return logView;
         }
-        FrameLayout logView = new FrameLayout(rootView.getContext());
-        logView.setBackgroundColor(Color.BLACK);
-        logView.addView(recyclerView);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.END;
-        TextView tvClose = new TextView(rootView.getContext());
-        tvClose.setTextSize(20);
-        tvClose.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tvClose.setText("Close");
+        View logView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.hilog_clear_close, null, false);
+        TextView tvClose = logView.findViewById(R.id.tv_close);
+        TextView tvClear = logView.findViewById(R.id.tv_clear);
         tvClose.setOnClickListener(v -> {
             closeLogView();
         });
-        logView.addView(tvClose, params);
+
+        tvClear.setOnClickListener(v -> {
+            clearLogView();
+        });
         return this.logView = logView;
     }
 
@@ -102,5 +94,12 @@ public class HiLogViewPrinterProvider {
     private void closeLogView() {
         isOpen = false;
         rootView.removeView(genLogView());
+    }
+
+    /**
+     * 清空Log
+     */
+    private void clearLogView() {
+        recyclerView.removeAllViews();
     }
 }

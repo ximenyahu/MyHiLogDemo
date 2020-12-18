@@ -1,7 +1,5 @@
 package com.simon.hi_library.log;
 
-import android.util.Printer;
-
 import java.util.ArrayList;
 import java.util.List;
 
